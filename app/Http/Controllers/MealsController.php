@@ -19,7 +19,7 @@ class MealsController extends Controller
     request()->validate([//Request Controls needs to be add here.
             'meal_name' => 'required',
             'meal_date' => 'required',
-            'user_id' => 'required'
+            'user_id' => 'required',
         ]);
     
         return Meals::create([//Get request and post this columns.
