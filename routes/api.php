@@ -19,16 +19,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/users', function (Request $request) {
-    return Users::all();
+Route::group(['middleware' => ['auth:sanctum']], function () {
+
+    Route::get('/meals', [MealsController::class, 'index']);
+    Route::post('/meals',  [MealsController::class, 'store']);
+    Route::put('/meals/{meal}', [MealsController::class, 'update']);
+    Route::delete('/meals/{meal}', [MealsController::class, 'delete']);
+    
+    Route::post('/user', [UsersController::class, 'store']);
 });
 
-
-Route::get('/meals', [MealsController::class, 'index']);
-Route::post('/meals',  [MealsController::class, 'store']);
-Route::put('/meals/{meal}', [MealsController::class, 'update']);
-Route::delete('/meals/{meal}', [MealsController::class, 'delete']);
-
-Route::post('/user', [UsersController::class, 'store']);
 
 Route::post('/token/CreateToken/', [TokenController::class, 'index']);
