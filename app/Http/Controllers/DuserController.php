@@ -4,18 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use App\Models\Users;
+use App\Models\Dusers;
 
 
-class UsersController extends Controller
+class DuserController extends Controller
 {
     public function index()
     {
         //
     }
 
-
-    public function get(Users $user){
+    public function get(Dusers $user){
         $user_id = request('id');
         $users = $user->find($user_id);
         if ($users)
@@ -32,21 +31,13 @@ class UsersController extends Controller
             ];  
         }
     }
-    public function login(Users $user){
+    public function login(Dusers $user){
         $email = request('email');
-        $hashed = Hash::make(request('password'));
+        $password = request('password');
+        $users = $user->where('email',$email)->first();
 
-        $true = bcrypt(request('password'));
-      
-        $users = $user
-                    ->select('id','email','password')
-                    ->where([
-                                ['email', '=' , $email]
-                            ])->first();
-
-                            return $true . ' - ' . $users->password;
         //Bakılacak
-        if ($users && $true)
+        if (Hash::check($password, $users->password)) 
         {
             return [
                 'id' => $users->id,
@@ -65,11 +56,11 @@ class UsersController extends Controller
     request()->validate([//Request Controls needs to be add here.
             'name' => 'required',
             'surname' => 'required',
-            'email' => 'required|email|unique:users',
+            'email' => 'required|email|unique:dusers',
             'password' => 'required'
         ]);
         $password = request('password');
-        return Users::create([//Get request and post this columns.
+        return Dusers::create([//Get request and post this columns.
             'name' => request('name'),
             'surname' => request('surname'),
             'email' => request('email'),
@@ -82,7 +73,7 @@ class UsersController extends Controller
         ]);
     }
 
-    public function delete(Users $user){
+    public function delete(Dusers $user){
         $status = $user->delete();
 
         return [
