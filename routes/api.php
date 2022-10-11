@@ -27,7 +27,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/meals',  [MealsController::class, 'store']);
     Route::put('/meals/{meal}', [MealsController::class, 'update']);
     Route::delete('/meals/{meal}', [MealsController::class, 'delete']);
-
+    Route::post('/meals/getUserMeal',  [MealsController::class, 'get']);
+    
     Route::post('/users', [DuserController::class, 'store']);//Save User Data
     Route::get('/users/{id}',  [DuserController::class, 'get']);//Get User Data
     Route::post('/users/login',  [DuserController::class, 'login']);//User Can Login

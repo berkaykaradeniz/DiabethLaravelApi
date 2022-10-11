@@ -14,6 +14,24 @@ class MealsController extends Controller
         return Meals::all();
     }
 
+    public function get(Meals $meals){
+        //user_id ve meal_date yollayarak günün öğününü getireceğim.
+        $user_id = request('user_id');
+        $meal_date = request('meal_date');
+        $meals = $meals->where('meal_date', $meal_date)
+                        ->where('user_id', $user_id)
+                        ->get();
+        if ($meals)
+        {
+            return $meals->toJson();
+        }
+        else{
+            return [
+                'status' => 'Fail'
+            ];  
+        }
+    }
+
    public function store(){
        
     request()->validate([//Request Controls needs to be add here.
