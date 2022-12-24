@@ -22,7 +22,7 @@ class DuserController extends Controller
             return [
                 'name' => $users->name,
                 'email' => $users->email,
-                'status' => 'Success'
+                'status' => 1
             ];
         }
         else{
@@ -36,18 +36,28 @@ class DuserController extends Controller
         $password = request('password');
         $users = $user->where('email',$email)->first();
 
+        $pass = $users->password ?? 0;
         //Bakılacak
-        if (Hash::check($password, $users->password)) 
+        if ($pass == 0)
+        {
+            return [
+                'status' => 0,
+                'message' => 'Kullanıcı hesabı mevcut değil'
+            ]; 
+        }
+        else if (Hash::check($password, $pass)) 
         {
             return [
                 'id' => $users->id,
                 'email' => $users->email,
-                'status' => "1"
+                'status' => 1,
+                'message' => 'Giriş başarılı'
             ];
         }
         else{
             return [
-                'status' => "0"
+                'status' => 0,
+                'message' => 'Email veya Şifre hatalı'
             ];  
         }
     }
@@ -60,7 +70,7 @@ class DuserController extends Controller
             'password' => 'required'
         ]);
         $password = request('password');
-        return Dusers::create([//Get request and post this columns.
+        $user = Dusers::create([//Get request and post this columns.
             'name' => request('name'),
             'surname' => request('surname'),
             'email' => request('email'),
@@ -71,6 +81,14 @@ class DuserController extends Controller
             'length' => request('length'),
             'kilo' => request('kilo')
         ]);
+        
+        if (!$user) {
+            return response([
+                'message' => ['The provided credentials are incorrect.'. request('name')]
+            ], 500);
+        }
+    
+        return response(['status' => 1], 200);
     }
 
     public function delete(Dusers $user){

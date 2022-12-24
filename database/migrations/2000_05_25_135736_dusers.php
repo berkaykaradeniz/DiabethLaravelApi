@@ -20,15 +20,14 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->comment('Şifre');
-            $table->integer('phone_number')->comment('Telefon Numarası')->nullable();;
+            $table->integer('phone_number')->comment('Telefon Numarası')->nullable();
             $table->date('birth_date')->comment('Doğum Tarihi')->nullable();;
-            $table->integer('sexuality')->comment('Cinsiyet 0 Kadın 1 Erkek 2 Belirsiz')->nullable();;
-            $table->integer('length')->comment('Boy')->nullable();;
-            $table->double('kilo')->comment('Kilo')->nullable();;
+            $table->integer('sexuality')->comment('Cinsiyet 0 Kadın 1 Erkek 2 Belirsiz')->nullable();
+            $table->integer('length')->comment('Boy')->nullable();
+            $table->double('kilo')->comment('Kilo')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
-
     }
 
     /**

@@ -15,11 +15,13 @@ return new class extends Migration
     {
         Schema::create('meals', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamp('meal_date');        
             $table->string('meal_name');
             $table->timestamps();
+        });
+
+        Schema::table('meals', function (Blueprint $table) {
+            $table->foreignId('user_id')->references('id')->on('dusers'); 
         });
     }
 

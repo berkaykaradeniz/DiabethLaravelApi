@@ -26,9 +26,32 @@ class MealsController extends Controller
             return $meals->toJson();
         }
         else{
-            return [
-                'status' => 'Fail'
-            ];  
+            return response([
+                'message' => 'Error',
+                'status' => 0
+            ], 201);
+        }
+    }
+
+    public function getDay(Meals $meals){
+        //user_id ve meal_date yollayarak günün öğününü getireceğim.
+        $user_id = request('user_id');
+        $start_meal_date = request('start_meal_date');
+        $end_meal_date = request('end_meal_date');
+
+        $meals = $meals->where('meal_date','>=', $start_meal_date)
+                        ->where('meal_date','<=', $end_meal_date)
+                        ->where('user_id', $user_id)
+                        ->get();
+        if ($meals)
+        {
+            return $meals->toJson();
+        }
+        else{
+            return response([
+                'message' => 'Error',
+                'status' => 0
+            ], 201);
         }
     }
 
@@ -40,11 +63,24 @@ class MealsController extends Controller
             'user_id' => 'required',
         ]);
     
-        return Meals::create([//Get request and post this columns.
+        $meal = Meals::create([//Get request and post this columns.
             'meal_date' => request('meal_date'),
             'meal_name' => request('meal_name'),
             'user_id' => request('user_id')
         ]);
+
+
+        if (!$meal) {
+            return response([
+                'message' => ['The provided credentials are incorrect.'],
+                'status' => 0
+            ], 201);
+        }else{
+            return response([
+                'message' => 'Meal Created',
+                'status' => 1
+            ], 200);
+        }    
     }
 
     public function update(Meals $meal){
@@ -58,16 +94,34 @@ class MealsController extends Controller
             'meal_name' => request('meal_name')
         ]);
     
-        return [
-            'status' => $status
-        ];
+        if ($status){
+            return response([
+                'message' => 'Meal Updated',
+                'status' => 1
+            ], 200);
+        }
+        else{
+            return response([
+                'message' => 'Meal Update Error',
+                'status' => 0
+            ], 201);
+        }
     }
 
     public function delete(Meals $meal){
         $status = $meal->delete();
 
-        return [
-            'status' => $status
-        ];
+        if ($status){
+            return response([
+                'message' => 'Meal Deleted',
+                'status' => 1
+            ], 200);
+        }
+        else{
+            return response([
+                'message' => 'Meal Delete Error',
+                'status' => 0
+            ], 201);
+        }
     }
 }

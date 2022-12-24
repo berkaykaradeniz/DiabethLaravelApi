@@ -69,6 +69,28 @@ class UsersController extends Controller
             'password' => 'required'
         ]);
         $password = request('password');
+
+        $users = Users::create([//Get request and post this columns.
+            'name' => request('name'),
+            'surname' => request('surname'),
+            'email' => request('email'),
+            'password' => Hash::make($password),
+            'phone_number' => request('phone_number'),
+            'birth_date' => request('birth_date'),
+            'sexuality' => request('sexuality'),
+            'length' => request('length'),
+            'kilo' => request('kilo')
+        ]);
+
+
+        if (!$user) {
+            return response([
+                'message' => ['The provided credentials are incorrect.'. request('name')]
+            ], 500);
+        }
+    
+        return response(['status' => 1], 200);
+/*
         return Users::create([//Get request and post this columns.
             'name' => request('name'),
             'surname' => request('surname'),
@@ -80,6 +102,8 @@ class UsersController extends Controller
             'length' => request('length'),
             'kilo' => request('kilo')
         ]);
+
+       */ 
     }
 
     public function delete(Users $user){
